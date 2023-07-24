@@ -2,15 +2,15 @@
 
 from collections import defaultdict, Counter
 import tracemalloc
-import readrides
+import cta
 
 tracemalloc.start()
 
-rows = readrides.read_rides_as_dicts('../../Data/ctabus.csv')
+rows = cta.read_rides_as_dicts('../../Data/ctabus.csv')
 
 # --------------------------------------------------
 # Question 1:  How many bus routes are in Chicago?
-# Solution: Use a set to get unique values. 
+# Solution: Use a set to get unique values.
 
 routes = set()
 for row in rows:
@@ -21,11 +21,12 @@ print(len(routes), 'routes')
 # Question 2: How many people rode route 22 on February 2, 2011?
 # Solution: Make dictionary with composite keys
 
-by_route_date = { }
+by_route_date = {}
 for row in rows:
     by_route_date[row['route'], row['date']] = row['rides']
 
-print('Rides on Route 22, February 2, 2011:', by_route_date['22','02/02/2011'])
+print('Rides on Route 22, February 2, 2011:',
+      by_route_date['22', '02/02/2011'])
 
 # --------------------------------------------------
 # Question 3: Total number of rides per route
