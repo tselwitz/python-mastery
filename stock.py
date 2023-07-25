@@ -1,7 +1,4 @@
 # stock.py
-from decimal import Decimal
-from reader import read_csv_as_instances
-
 
 class Stock:
     __slots__ = ('name', '_shares', '_price')
@@ -13,7 +10,8 @@ class Stock:
         self.price = price
 
     def __repr__(self):
-        return "Stock('%s', %d, %.2f)" % (self.name, self.shares, self.price)
+        # Note: The !r format code produces the repr() string
+        return f'{type(self).__name__}({self.name!r}, {self.shares!r}, {self.price!r})'
 
     def __eq__(self, other):
         return isinstance(other, Stock) and ((self.name, self.shares, self.price) ==
@@ -52,23 +50,6 @@ class Stock:
     def cost(self):
         return self.shares * self.price
 
-    def sell(self, shares):
-        self.shares -= shares
-
-
-class DStock(Stock):
-    _types = (str, int, Decimal)
-
-
-def print_portfolio(portfolio):
-    print('%10s %10s %10s' % ("name", "shares", "price"))
-    print('-'*33)
-    for s in portfolio:
-        print('%10s %10d %10.2f' % (s.name, s.shares, s.price))
-
-
-if __name__ == "__main__":
-    filename = "Data/portfolio.csv"
-    portfolio = read_csv_as_instances(filename, DStock)
-    print_portfolio(portfolio)
-    print(repr(portfolio))
+    def sell(self, nshares):
+        self.shares -= nshares
+        return self.shares
