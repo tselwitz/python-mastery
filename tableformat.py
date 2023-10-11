@@ -104,9 +104,10 @@ def print_table(records, fields, formatter):
 
 
 if __name__ == "__main__":
-    import stock
+    import orig_stock
     import reader
-    portfolio = reader.read_csv_as_instances('Data/portfolio.csv', stock.Stock)
+    portfolio = reader.read_csv_as_instances(
+        'Data/portfolio.csv', orig_stock.Stock)
     formatter = create_formatter("text", column_formats=[
                                  "%s", "%d", "%0.2f"], upper_headers=True)
     print_table(portfolio, ['name', 'shares', 'price'], formatter)

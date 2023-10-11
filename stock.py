@@ -1,55 +1,25 @@
 # stock.py
 
-class Stock:
-    __slots__ = ('name', '_shares', '_price')
-    _types = (str, int, float)
+from structure import Structure
 
-    def __init__(self, name, shares, price):
-        self.name = name
-        self.shares = shares
-        self.price = price
 
-    def __repr__(self):
-        # Note: The !r format code produces the repr() string
-        return f'{type(self).__name__}({self.name!r}, {self.shares!r}, {self.price!r})'
-
-    def __eq__(self, other):
-        return isinstance(other, Stock) and ((self.name, self.shares, self.price) ==
-                                             (other.name, other.shares, other.price))
-
-    @classmethod
-    def from_row(cls, row):
-        values = [func(val) for func, val in zip(cls._types, row)]
-        return cls(*values)
-
-    @property
-    def shares(self):
-        return self._shares
-
-    @shares.setter
-    def shares(self, value):
-        if not isinstance(value, self._types[1]):
-            raise TypeError(f'Expected {self._types[1].__name__}')
-        if value < 0:
-            raise ValueError('shares must be >= 0')
-        self._shares = value
-
-    @property
-    def price(self):
-        return self._price
-
-    @price.setter
-    def price(self, value):
-        if not isinstance(value, self._types[2]):
-            raise TypeError(f'Expected {self._types[2].__name__}')
-        if value < 0:
-            raise ValueError('price must be >= 0')
-        self._price = value
+class Stock(Structure):
+    name = String()
+    shares = PositiveInteger()
+    price = PositiveFloat()
 
     @property
     def cost(self):
         return self.shares * self.price
 
-    def sell(self, nshares):
+    def sell(self, nshares: PositiveInteger):
         self.shares -= nshares
-        return self.shares
+
+
+if __name__ == '__main__':
+    from reader import read_csv_as_instances
+    from tableformat import create_formatter, print_table
+
+    portfolio = read_csv_as_instances('Data/portfolio.csv', Stock)
+    formatter = create_formatter('text')
+    print_table(portfolio, ['name', 'shares', 'price'], formatter)

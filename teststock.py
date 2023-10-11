@@ -21,7 +21,8 @@ class TestStock(unittest.TestCase):
 
     def test_sell(self):
         s = stock.Stock(name='GOOG', shares=100, price=490.1)
-        self.assertEqual(s.sell(1), 99)
+        s.sell(1)
+        self.assertEqual(s.shares, 99)
 
     def test_from_row(self):
         s = stock.Stock.from_row(['GOOG', 100, 490.1])
